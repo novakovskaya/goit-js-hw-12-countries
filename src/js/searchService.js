@@ -8,14 +8,13 @@ import { fetchCountries } from './fetchCountries';
 import refs from './refs';
 import countriesCardMarkup from '../templates/countriesCard.hbs';
 import countriesListMarkup from '../templates/countriesList.hbs';
-
-defaults.delay = 1500;
+defaults.delay = 2000;
 
 refs.input.addEventListener('input', debounce(onInputSearch, 500));
 
 function onInputSearch(event) {
   const inputValue = event.target.value;
-  let message = 'Request country not found!';
+  let message = 'Requested country not found!';
 
   fetchCountries(inputValue).then(countries => {
     if (countries.status === 404) {
