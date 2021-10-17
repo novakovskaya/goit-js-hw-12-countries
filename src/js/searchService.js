@@ -18,6 +18,7 @@ function onInputSearch(event) {
 
   if (inputValue === '') {
     clearContainer();
+    return;
   }
 
   fetchCountries(inputValue)
@@ -33,10 +34,7 @@ function onInputSearch(event) {
         createCountriesMarkup(...countries, countriesCardMarkup);
       }
     })
-    .catch(error => {
-      onError(message);
-      console.log(error);
-    });
+    .catch(error => onError(message));
 }
 
 function showNotification(message) {
