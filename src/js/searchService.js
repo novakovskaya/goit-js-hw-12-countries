@@ -24,10 +24,12 @@ function onInputSearch(event) {
   fetchCountries(inputValue)
     .then(countries => {
       if (countries.status === 404) {
-        onError(message);
+        showNotification(message);
+        clearContainer();
       } else if (countries.length > 10) {
         message = 'Too many matches found. Please enter a more specific query!';
-        onError(message);
+        showNotification(message);
+        clearContainer();
       } else if (countries.length >= 2 && countries.length <= 10) {
         createCountriesMarkup(countries, countriesListMarkup);
       } else if (countries.length === 1) {
@@ -49,9 +51,4 @@ function createCountriesMarkup(countries, template) {
 
 function clearContainer() {
   refs.countriesContainer.innerHTML = '';
-}
-
-function onError(message) {
-  showNotification(message);
-  clearContainer();
 }
