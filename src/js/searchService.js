@@ -13,25 +13,30 @@ defaults.delay = 2000;
 refs.input.addEventListener('input', debounce(onInputSearch, 500));
 
 function onInputSearch(event) {
-  const inputValue = event.target.value;
+  const inputValue = event.target.value.trim();
   let message = 'Requested country not found!';
 
-  fetchCountries(inputValue).then(countries => {
-    if (countries.status === 404) {
-      showNotification(message);
-      clearContainer();
-    } else if (countries.length > 10) {
-      message = 'Too many matches found. Please enter a more specific query!';
-      showNotification(message);
-      clearContainer();
-    } else if (countries.length > 2 && countries.length < 10) {
-      createCountriesMarkup(countries, countriesListMarkup);
-    } else if (countries.length === 1) {
-      createCountriesMarkup(...countries, countriesCardMarkup);
-    } else {
-      clearContainer();
-    }
-  });
+  if (inputValue === '') {
+    clearContainer();
+  }
+
+  fetchCountries(inputValue)
+    .then(countries => {
+      if (countries.status === 404) {
+        onError(message);
+      } else if (countries.length > 10) {
+        message = 'Too many matches found. Please enter a more specific query!';
+        onError(message);
+      } else if (countries.length >= 2 && countries.length <= 10) {
+        createCountriesMarkup(countries, countriesListMarkup);
+      } else if (countries.length === 1) {
+        createCountriesMarkup(...countries, countriesCardMarkup);
+      }
+    })
+    .catch(error => {
+      onError(message);
+      console.log(error);
+    });
 }
 
 function showNotification(message) {
@@ -46,4 +51,9 @@ function createCountriesMarkup(countries, template) {
 
 function clearContainer() {
   refs.countriesContainer.innerHTML = '';
+}
+
+function onError(message) {
+  showNotification(message);
+  clearContainer();
 }
