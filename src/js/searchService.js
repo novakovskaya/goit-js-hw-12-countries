@@ -36,7 +36,7 @@ function onInputSearch(event) {
         createCountriesMarkup(...countries, countriesCardMarkup);
       }
     })
-    .catch(error => onError(message));
+    .catch(error => showNotification(message));
 }
 
 function showNotification(message) {
